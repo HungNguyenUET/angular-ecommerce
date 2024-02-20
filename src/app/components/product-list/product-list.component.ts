@@ -19,7 +19,7 @@ export class ProductListComponent implements OnInit {
   thePageSize: number = 5;
   theTotalElements: number = 0;
 
-  currency: string = 'USD';
+  previousKeyWord: string = "";
 
   constructor(private productService: ProductService,
               private route: ActivatedRoute) {
@@ -37,6 +37,7 @@ export class ProductListComponent implements OnInit {
     this.searchMode = this.route.snapshot.paramMap.has('keyword');
 
     if (this.searchMode) {
+      debugger
       this.handleSearchProducts();
     } else {    
       this.handleListProducts();
@@ -45,15 +46,22 @@ export class ProductListComponent implements OnInit {
   }
 
   handleSearchProducts() {
+    debugger
     const theKeyword: string = this.route.snapshot.paramMap.get('keyword')!;
 
-    this.productService.searchProducts(theKeyword).subscribe(
-      data => {
-        this.products = data;
-      }
-    )
+    if (this.previousKeyWord != theKeyword) {
+      this.thePageNumber = 1;
+    }
 
-    this.productService.searchProductsPaginate(this.thePageNumber - 1, this.thePageSize, theKeyword).subscribe(this.processResult)
+    this.previousKeyWord = theKeyword;
+
+    // this.productService.searchProducts(theKeyword).subscribe(
+    //   data => {
+    //     this.products = data;
+    //   }
+    // )
+
+    this.productService.searchProductsPaginate(this.thePageNumber - 1, this.thePageSize, theKeyword).subscribe(this.processResult())
   }
 
   handleListProducts() {
@@ -80,7 +88,7 @@ export class ProductListComponent implements OnInit {
 
     this.productService.getProductListPaginate(this.thePageNumber - 1,
                                               this.thePageSize,
-                                              this.currentCategoryId).subscribe(this.processResult)
+                                              this.currentCategoryId).subscribe(this.processResult())
   }
 
   updatePageSize(pageSize: string) {
@@ -97,6 +105,5 @@ export class ProductListComponent implements OnInit {
       this.theTotalElements = data.page.totalElements
     }
   }
-
-
+  
 }
