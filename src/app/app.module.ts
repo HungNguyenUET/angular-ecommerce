@@ -20,6 +20,7 @@ import { LoginComponent } from './components/login/login.component';
 import { LoginStatusComponent } from './components/login-status/login-status.component';
 
 import myAppConfig from './config/my-app-config';
+import { AppService } from './services/app.service';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -54,7 +55,7 @@ const routes: Routes = [
     NgbModule,
     ReactiveFormsModule
   ],
-  providers: [ProductService],
+  providers: [ProductService, AppService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
